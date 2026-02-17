@@ -123,7 +123,7 @@ across ALL seasons in the dataset. Captures matchup-specific tendencies.
 | experience | int | Years of NBA experience (0 = rookie) |
 | position | str | Position (G, F, C, G-F, F-C, etc.) |
 
-## Injury Context Features (19 features) â€” THE CORE
+## Injury Context Features (19 features) — THE CORE
 
 These features encode the injury state of the player's TEAMMATES for
 each game. They are the foundation of the Injury Ripple Effect model.

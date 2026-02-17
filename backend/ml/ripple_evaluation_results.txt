@@ -1,0 +1,95 @@
+Ripple Effect Model Evaluation Results
+======================================================================
+
+Chosen Approach: B
+Median ripple sensitivity: 0.258
+Decision threshold: 0.3
+
+Approach A vs B Comparison
+----------------------------------------------------------------------
+Stat          A MAE    B MAE   A RMSE   B RMSE     A R²     B R²
+----------------------------------------------------------------------
+pts           4.556    4.630    5.946    6.055   0.5440   0.5271
+ast           1.335    1.356    1.811    1.841   0.5237   0.5081
+reb           1.900    1.941    2.506    2.562   0.4786   0.4550
+stl           0.715    0.724    0.933    0.950   0.1133   0.0807
+blk           0.528    0.523    0.734    0.746   0.1978   0.1716
+fg_pct        0.184    0.189    0.241    0.252   0.0853  -0.0017
+ft_pct        0.332    0.328    0.387    0.398   0.2100   0.1666
+minutes       4.710    5.062    6.123    6.615   0.6780   0.6241
+
+
+Per-Stat Ripple Sensitivity (Approach A)
+----------------------------------------------------------------------
+Stat        Mean |Ripple|  Max |Ripple|   Games >1.0
+----------------------------------------------------------------------
+pts                  1.84         11.04        66.4%
+ast                  0.40          3.08         8.6%
+reb                  0.73          4.65        22.7%
+stl                  0.11          0.91         0.0%
+blk                  0.08          1.47         0.1%
+fg_pct               0.01          0.22         0.0%
+ft_pct               0.06          0.48         0.0%
+minutes              4.56         31.94        96.5%
+
+Median of mean |ripple| across all targets: 0.258
+
+
+Top Features by Permutation Importance
+----------------------------------------------------------------------
+
+pts:
+  total_pts_lost                      0.0097 [INJURY]
+  total_reb_lost                      0.0064 [INJURY]
+  primary_scorer_out                  0.0039 [INJURY]
+  games_with_this_config              0.0038 [INJURY]
+  starter_2_out                       0.0019 [INJURY]
+
+ast:
+  total_pts_lost                      0.0069 [INJURY]
+  n_rotation_players_out              0.0022 [INJURY]
+  starter_4_out                       0.0004 [INJURY]
+  sixth_man_out                       -0.0001 [INJURY]
+  starter_3_out                       -0.0001 [INJURY]
+
+reb:
+  total_reb_lost                      0.0551 [INJURY]
+  n_rotation_players_out              0.0185 [INJURY]
+  starter_2_out                       0.0044 [INJURY]
+  primary_rebounder_out               0.0035 [INJURY]
+  n_starters_out                      0.0027 [INJURY]
+
+stl:
+  ball_handler_out                    0.0007 [INJURY]
+  starter_5_out                       0.0004 [INJURY]
+  starter_2_out                       0.0003 [INJURY]
+  primary_defender_out                0.0001 [INJURY]
+  primary_rebounder_out               0.0001 [INJURY]
+
+blk:
+  n_rotation_players_out              0.0031 [INJURY]
+  starter_3_out                       0.0012 [INJURY]
+  primary_scorer_out                  0.0010 [INJURY]
+  games_with_this_config              0.0008 [INJURY]
+  starter_4_out                       0.0004 [INJURY]
+
+fg_pct:
+  starter_2_out                       0.0320 [INJURY]
+  total_ast_lost                      0.0112 [INJURY]
+  n_rotation_players_out              0.0111 [INJURY]
+  games_with_this_config              0.0038 [INJURY]
+  primary_defender_out                0.0024 [INJURY]
+
+ft_pct:
+  starter_2_out                       0.0165 [INJURY]
+  total_pts_lost                      0.0141 [INJURY]
+  n_rotation_players_out              0.0095 [INJURY]
+  games_with_this_config              0.0034 [INJURY]
+  primary_defender_out                0.0006 [INJURY]
+
+minutes:
+  n_rotation_players_out              0.0846 [INJURY]
+  total_minutes_lost                  0.0364 [INJURY]
+  games_with_this_config              0.0120 [INJURY]
+  starter_1_out                       0.0099 [INJURY]
+  primary_scorer_out                  0.0050 [INJURY]

@@ -1,0 +1,47 @@
+{
+  "chosen_approach": "B",
+  "median_ripple_sensitivity": 0.25802631758392147,
+  "threshold": 0.3,
+  "per_stat_sensitivity": {
+    "pts": {
+      "mean_ripple": 1.8390165031384602,
+      "max_ripple": 11.044866399510626,
+      "pct_above_1": 66.40310195392686
+    },
+    "ast": {
+      "mean_ripple": 0.40118265680331183,
+      "max_ripple": 3.0762844768073734,
+      "pct_above_1": 8.560784611875617
+    },
+    "reb": {
+      "mean_ripple": 0.7299446787468602,
+      "max_ripple": 4.647963805452271,
+      "pct_above_1": 22.702045160799816
+    },
+    "stl": {
+      "mean_ripple": 0.11486997836453111,
+      "max_ripple": 0.914408537859457,
+      "pct_above_1": 0.0
+    },
+    "blk": {
+      "mean_ripple": 0.08349677509493007,
+      "max_ripple": 1.4720921001593577,
+      "pct_above_1": 0.08363111077320763
+    },
+    "fg_pct": {
+      "mean_ripple": 0.011786828922440951,
+      "max_ripple": 0.22227817338651246,
+      "pct_above_1": 0.0
+    },
+    "ft_pct": {
+      "mean_ripple": 0.06417117876012633,
+      "max_ripple": 0.47740014004188497,
+      "pct_above_1": 0.0
+    },
+    "minutes": {
+      "mean_ripple": 4.5588180007344095,
+      "max_ripple": 31.94140449610463,
+      "pct_above_1": 96.5026990040295
+    }
+  }
+}

@@ -1,0 +1,30 @@
+Baseline Model Evaluation Results
+======================================================================
+
+Train set: games before 2024-10-01
+Test set: games from 2024-10-01
+Features: 37 baseline features (no injury context)
+
+HistGradientBoosting vs Ridge Comparison
+----------------------------------------------------------------------
+Stat         HGB MAE  Ridge MAE   HGB RMSE  Ridge RMSE   HGB R²  Ridge R²           Note
+----------------------------------------------------------------------
+pts            4.619      4.614      6.032       6.029   0.5307    0.5312        minimal
+ast            1.346      1.343      1.830       1.827   0.5139    0.5157        minimal
+reb            1.921      1.921      2.539       2.533   0.4645    0.4670        minimal
+stl            0.717      0.715      0.935       0.934   0.1091    0.1113        minimal
+blk            0.528      0.525      0.736       0.735   0.1932    0.1960        minimal
+fg_pct         0.184      0.185      0.241       0.242   0.0840    0.0784        minimal
+ft_pct         0.334      0.335      0.388       0.389   0.2069    0.2031        minimal
+minutes        4.956      4.951      6.461       6.473   0.6414    0.6401        minimal
+
+
+Interpretation:
+- 'substantial' = HGB R² lift over Ridge > 0.02 (tree model captures non-linearities)
+- 'minimal' = HGB R² lift over Ridge <= 0.02 (linear model nearly as good)
+- Counting stats (pts, ast, reb) typically show more lift from tree models.
+- Percentage stats (fg_pct, ft_pct) have inherently low signal due to single-game variance.
+
+Takeaway for interview: Model complexity is justified when the lift is
+substantial. For stats with minimal difference, a simpler linear model
+may be preferred in production (easier to maintain, faster inference).

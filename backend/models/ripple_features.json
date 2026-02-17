@@ -1,0 +1,19 @@
+[
+  "n_starters_out",
+  "starter_1_out",
+  "starter_2_out",
+  "starter_3_out",
+  "starter_4_out",
+  "starter_5_out",
+  "ball_handler_out",
+  "primary_scorer_out",
+  "primary_rebounder_out",
+  "primary_defender_out",
+  "sixth_man_out",
+  "n_rotation_players_out",
+  "total_pts_lost",
+  "total_ast_lost",
+  "total_reb_lost",
+  "total_minutes_lost",
+  "games_with_this_config"
+]
