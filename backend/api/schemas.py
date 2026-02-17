@@ -240,6 +240,12 @@ class ChatUsageInfo(BaseModel):
     remaining: int
 
 
+class ChatExamplesResponse(BaseModel):
+    """Response for GET /api/chat/examples."""
+
+    examples: list[str]
+
+
 # ── Error Schemas ───────────────────────────────────────────────
 
 

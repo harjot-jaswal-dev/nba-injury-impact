@@ -426,6 +426,79 @@ class DataStore:
             for t in VALID_TEAMS
         ]
 
+    def get_top_players_by_team(
+        self, team_abbr: str, limit: int = 3
+    ) -> list[dict]:
+        """Get top N players by season avg points for a team.
+
+        Used by the chat examples endpoint to generate dynamic starter queries.
+        """
+        if self._processed_df is None or self._processed_df.empty:
+            return []
+
+        df = self._processed_df
+        team_df = df[df["team_abbr"] == team_abbr.upper()]
+        if team_df.empty:
+            return []
+
+        latest = team_df.sort_values("game_date").groupby("player_id").last().reset_index()
+        latest = latest.sort_values("season_avg_pts", ascending=False).head(limit)
+
+        return [
+            {
+                "player_id": int(row["player_id"]),
+                "player_name": row["player_name"],
+                "team_abbr": row["team_abbr"],
+                "position": _safe_val(row.get("position")),
+                "season_avg_pts": _safe_float(row.get("season_avg_pts")),
+            }
+            for _, row in latest.iterrows()
+        ]
+
+    def get_next_game_for_team(self, team_abbr: str) -> Optional[dict]:
+        """Get the next scheduled game for a team, or fall back to most recent.
+
+        Returns {opponent, home_or_away, game_date} so the chat can derive
+        realistic game context instead of hardcoding HOME.
+        """
+        team_upper = team_abbr.upper()
+
+        # Try schedule.csv for upcoming games
+        if self._schedule_df is not None and not self._schedule_df.empty:
+            sched = self._schedule_df[self._schedule_df["status"] == "scheduled"]
+            team_games = sched[
+                (sched["home_team"] == team_upper) | (sched["away_team"] == team_upper)
+            ]
+            if not team_games.empty:
+                next_game = team_games.sort_values("game_date").iloc[0]
+                is_home = next_game["home_team"] == team_upper
+                opponent = next_game["away_team"] if is_home else next_game["home_team"]
+                return {
+                    "opponent": opponent,
+                    "home_or_away": "HOME" if is_home else "AWAY",
+                    "game_date": str(next_game["game_date"].date())
+                    if hasattr(next_game["game_date"], "date")
+                    else str(next_game["game_date"]),
+                }
+
+        # Fallback: most recent completed game from processed data
+        if self._processed_df is not None and not self._processed_df.empty:
+            df = self._processed_df
+            team_df = df[df["team_abbr"] == team_upper]
+            if not team_df.empty:
+                latest = team_df.sort_values("game_date").iloc[-1]
+                home_or_away = latest.get("home_away", "HOME")
+                opponent = latest.get("opponent", "")
+                return {
+                    "opponent": str(opponent) if opponent else "",
+                    "home_or_away": str(home_or_away),
+                    "game_date": str(latest["game_date"].date())
+                    if hasattr(latest["game_date"], "date")
+                    else str(latest["game_date"]),
+                }
+
+        return None
+
     def get_player_season_averages(self, player_id: int) -> Optional[dict]:
         """Get a player's latest season averages."""
         if self._processed_df is None or self._processed_df.empty:

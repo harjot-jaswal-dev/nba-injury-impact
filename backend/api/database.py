@@ -68,6 +68,21 @@ class ChatUsage(Base):
     question_count = Column(Integer, default=0)
 
 
+class ChatMessage(Base):
+    """Stores recent chat messages for lightweight conversation history.
+
+    Each user keeps at most 6 rows (3 exchanges). Pruned after each chat call.
+    """
+
+    __tablename__ = "chat_messages"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, index=True)
+    role = Column(String(20), nullable=False)  # "user" or "assistant"
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 class CachedPrediction(Base):
     __tablename__ = "cached_predictions"
 
