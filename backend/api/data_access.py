@@ -89,6 +89,8 @@ class DataStore:
         # Try schedule.csv first
         if self._schedule_df is not None and not self._schedule_df.empty:
             scheduled = self._schedule_df[self._schedule_df["status"] == "scheduled"]
+            # Filter out placeholder games (play-in/finals) with no teams assigned
+            scheduled = scheduled.dropna(subset=["home_team", "away_team"])
             if not scheduled.empty:
                 upcoming = scheduled.sort_values("game_date").head(limit)
                 games = [
@@ -153,13 +155,18 @@ class DataStore:
             match = self._schedule_df[self._schedule_df["game_id"] == game_id]
             if not match.empty:
                 row = match.iloc[0]
+                home = row["home_team"]
+                away = row["away_team"]
+                # Skip placeholder games (play-in/finals) with no teams
+                if pd.isna(home) or pd.isna(away):
+                    return None
                 return {
                     "game_id": int(row["game_id"]),
                     "game_date": str(row["game_date"].date())
                     if hasattr(row["game_date"], "date")
                     else str(row["game_date"]),
-                    "home_team": row["home_team"],
-                    "away_team": row["away_team"],
+                    "home_team": home,
+                    "away_team": away,
                     "status": row.get("status", "completed"),
                 }
 
@@ -188,16 +195,21 @@ class DataStore:
         }
 
     def get_key_players_for_game(
-        self, game_id: int, min_minutes: float = 15.0
+        self, game_id: int, min_minutes: float = 15.0,
+        home_team: str = None, away_team: str = None,
     ) -> dict:
         """Get key players (avg 15+ min) for both teams in a game.
+
+        For completed games, looks up players from processed data by game_id.
+        For future/scheduled games (not in processed data), uses home_team
+        and away_team hints to find each team's latest key players.
 
         Returns dict with home_team, away_team, home_players, away_players.
         Each player dict includes player_id, player_name, team_abbr.
         """
         result = {
-            "home_team": None,
-            "away_team": None,
+            "home_team": home_team,
+            "away_team": away_team,
             "home_players": [],
             "away_players": [],
         }
@@ -206,38 +218,63 @@ class DataStore:
 
         df = self._processed_df
         game_rows = df[df["game_id"] == game_id]
-        if game_rows.empty:
-            return result
 
-        game_date = game_rows.iloc[0]["game_date"]
+        if not game_rows.empty:
+            # Completed game — look up from processed data
+            game_date = game_rows.iloc[0]["game_date"]
 
-        for side in ("HOME", "AWAY"):
-            side_rows = game_rows[game_rows["home_away"] == side]
-            if side_rows.empty:
-                continue
-            team_abbr = side_rows.iloc[0]["team_abbr"]
-            key = "home" if side == "HOME" else "away"
-            result[f"{key}_team"] = team_abbr
+            for side in ("HOME", "AWAY"):
+                side_rows = game_rows[game_rows["home_away"] == side]
+                if side_rows.empty:
+                    continue
+                team_abbr = side_rows.iloc[0]["team_abbr"]
+                key = "home" if side == "HOME" else "away"
+                result[f"{key}_team"] = team_abbr
 
-            # Find all players on this team up to the game date
-            team_all = df[
-                (df["team_abbr"] == team_abbr) & (df["game_date"] <= game_date)
-            ]
-            # Get the latest row per player to check season_avg_minutes
-            latest_per_player = (
-                team_all.sort_values("game_date").groupby("player_id").last()
-            )
-            key_players = latest_per_player[
-                latest_per_player["season_avg_minutes"] >= min_minutes
-            ]
-            result[f"{key}_players"] = [
-                {
-                    "player_id": int(pid),
-                    "player_name": row["player_name"],
-                    "team_abbr": team_abbr,
-                }
-                for pid, row in key_players.iterrows()
-            ]
+                # Find all players on this team up to the game date
+                team_all = df[
+                    (df["team_abbr"] == team_abbr)
+                    & (df["game_date"] <= game_date)
+                ]
+                # Get the latest row per player to check season_avg_minutes
+                latest_per_player = (
+                    team_all.sort_values("game_date")
+                    .groupby("player_id")
+                    .last()
+                )
+                key_players = latest_per_player[
+                    latest_per_player["season_avg_minutes"] >= min_minutes
+                ]
+                result[f"{key}_players"] = [
+                    {
+                        "player_id": int(pid),
+                        "player_name": row["player_name"],
+                        "team_abbr": team_abbr,
+                    }
+                    for pid, row in key_players.iterrows()
+                ]
+        elif home_team and away_team:
+            # Future game — use team hints to find latest key players
+            for key, team_abbr in [("home", home_team), ("away", away_team)]:
+                team_all = df[df["team_abbr"] == team_abbr]
+                if team_all.empty:
+                    continue
+                latest_per_player = (
+                    team_all.sort_values("game_date")
+                    .groupby("player_id")
+                    .last()
+                )
+                key_players = latest_per_player[
+                    latest_per_player["season_avg_minutes"] >= min_minutes
+                ]
+                result[f"{key}_players"] = [
+                    {
+                        "player_id": int(pid),
+                        "player_name": row["player_name"],
+                        "team_abbr": team_abbr,
+                    }
+                    for pid, row in key_players.iterrows()
+                ]
 
         return result
 

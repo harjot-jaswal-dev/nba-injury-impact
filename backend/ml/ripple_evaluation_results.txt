@@ -2,94 +2,94 @@ Ripple Effect Model Evaluation Results
 ======================================================================
 
 Chosen Approach: B
-Median ripple sensitivity: 0.258
+Median ripple sensitivity: 0.187
 Decision threshold: 0.3
 
 Approach A vs B Comparison
 ----------------------------------------------------------------------
 Stat          A MAE    B MAE   A RMSE   B RMSE     A R²     B R²
 ----------------------------------------------------------------------
-pts           4.556    4.630    5.946    6.055   0.5440   0.5271
-ast           1.335    1.356    1.811    1.841   0.5237   0.5081
-reb           1.900    1.941    2.506    2.562   0.4786   0.4550
-stl           0.715    0.724    0.933    0.950   0.1133   0.0807
-blk           0.528    0.523    0.734    0.746   0.1978   0.1716
-fg_pct        0.184    0.189    0.241    0.252   0.0853  -0.0017
-ft_pct        0.332    0.328    0.387    0.398   0.2100   0.1666
-minutes       4.710    5.062    6.123    6.615   0.6780   0.6241
+pts           4.475    4.569    5.860    5.992   0.5521   0.5317
+ast           1.321    1.346    1.788    1.826   0.5124   0.4915
+reb           1.868    1.907    2.466    2.518   0.4508   0.4275
+stl           0.723    0.735    0.942    0.966   0.1035   0.0565
+blk           0.520    0.505    0.722    0.739   0.1925   0.1553
+fg_pct        0.184    0.191    0.240    0.255   0.0872  -0.0229
+ft_pct        0.328    0.324    0.385    0.398   0.2189   0.1650
+minutes       4.605    4.862    6.014    6.361   0.6591   0.6187
 
 
 Per-Stat Ripple Sensitivity (Approach A)
 ----------------------------------------------------------------------
 Stat        Mean |Ripple|  Max |Ripple|   Games >1.0
 ----------------------------------------------------------------------
-pts                  1.84         11.04        66.4%
-ast                  0.40          3.08         8.6%
-reb                  0.73          4.65        22.7%
-stl                  0.11          0.91         0.0%
-blk                  0.08          1.47         0.1%
-fg_pct               0.01          0.22         0.0%
-ft_pct               0.06          0.48         0.0%
-minutes              4.56         31.94        96.5%
+pts                  1.50          9.41        58.7%
+ast                  0.31          3.88         4.4%
+reb                  0.55          4.47        12.4%
+stl                  0.07          0.66         0.0%
+blk                  0.07          0.97         0.0%
+fg_pct               0.01          0.19         0.0%
+ft_pct               0.04          0.36         0.0%
+minutes              3.60         20.96        94.1%
 
-Median of mean |ripple| across all targets: 0.258
+Median of mean |ripple| across all targets: 0.187
 
 
 Top Features by Permutation Importance
 ----------------------------------------------------------------------
 
 pts:
-  total_pts_lost                      0.0097 [INJURY]
-  total_reb_lost                      0.0064 [INJURY]
-  primary_scorer_out                  0.0039 [INJURY]
-  games_with_this_config              0.0038 [INJURY]
-  starter_2_out                       0.0019 [INJURY]
+  n_rotation_players_out              0.0278 [INJURY]
+  total_pts_lost                      0.0240 [INJURY]
+  total_reb_lost                      0.0085 [INJURY]
+  total_minutes_lost                  0.0074 [INJURY]
+  total_ast_lost                      0.0059 [INJURY]
 
 ast:
-  total_pts_lost                      0.0069 [INJURY]
-  n_rotation_players_out              0.0022 [INJURY]
-  starter_4_out                       0.0004 [INJURY]
-  sixth_man_out                       -0.0001 [INJURY]
-  starter_3_out                       -0.0001 [INJURY]
+  games_with_this_config              0.0024 [INJURY]
+  total_ast_lost                      0.0019 [INJURY]
+  starter_3_out                       0.0016 [INJURY]
+  primary_scorer_out                  0.0011 [INJURY]
+  starter_1_out                       0.0008 [INJURY]
 
 reb:
-  total_reb_lost                      0.0551 [INJURY]
-  n_rotation_players_out              0.0185 [INJURY]
-  starter_2_out                       0.0044 [INJURY]
-  primary_rebounder_out               0.0035 [INJURY]
-  n_starters_out                      0.0027 [INJURY]
+  total_reb_lost                      0.0301 [INJURY]
+  n_rotation_players_out              0.0202 [INJURY]
+  n_starters_out                      0.0061 [INJURY]
+  starter_1_out                       0.0025 [INJURY]
+  primary_rebounder_out               0.0020 [INJURY]
 
 stl:
-  ball_handler_out                    0.0007 [INJURY]
-  starter_5_out                       0.0004 [INJURY]
-  starter_2_out                       0.0003 [INJURY]
-  primary_defender_out                0.0001 [INJURY]
-  primary_rebounder_out               0.0001 [INJURY]
+  total_reb_lost                      0.0154 [INJURY]
+  total_minutes_lost                  0.0042 [INJURY]
+  games_with_this_config              0.0020 [INJURY]
+  starter_2_out                       0.0012 [INJURY]
+  starter_1_out                       0.0007 [INJURY]
 
 blk:
-  n_rotation_players_out              0.0031 [INJURY]
-  starter_3_out                       0.0012 [INJURY]
-  primary_scorer_out                  0.0010 [INJURY]
-  games_with_this_config              0.0008 [INJURY]
-  starter_4_out                       0.0004 [INJURY]
+  n_rotation_players_out              0.0021 [INJURY]
+  starter_3_out                       0.0008 [INJURY]
+  games_with_this_config              0.0004 [INJURY]
+  starter_1_out                       0.0003 [INJURY]
+  starter_4_out                       0.0002 [INJURY]
 
 fg_pct:
-  starter_2_out                       0.0320 [INJURY]
-  total_ast_lost                      0.0112 [INJURY]
-  n_rotation_players_out              0.0111 [INJURY]
-  games_with_this_config              0.0038 [INJURY]
-  primary_defender_out                0.0024 [INJURY]
+  n_rotation_players_out              0.0349 [INJURY]
+  total_reb_lost                      0.0213 [INJURY]
+  starter_3_out                       0.0050 [INJURY]
+  starter_2_out                       0.0048 [INJURY]
+  games_with_this_config              0.0027 [INJURY]
 
 ft_pct:
-  starter_2_out                       0.0165 [INJURY]
-  total_pts_lost                      0.0141 [INJURY]
-  n_rotation_players_out              0.0095 [INJURY]
-  games_with_this_config              0.0034 [INJURY]
-  primary_defender_out                0.0006 [INJURY]
+  starter_2_out                       0.0053 [INJURY]
+  primary_defender_out                0.0017 [INJURY]
+  ball_handler_out                    0.0013 [INJURY]
+  primary_rebounder_out               0.0010 [INJURY]
+  starter_5_out                       0.0007 [INJURY]
 
 minutes:
-  n_rotation_players_out              0.0846 [INJURY]
-  total_minutes_lost                  0.0364 [INJURY]
-  games_with_this_config              0.0120 [INJURY]
-  starter_1_out                       0.0099 [INJURY]
-  primary_scorer_out                  0.0050 [INJURY]
+  n_rotation_players_out              0.0886 [INJURY]
+  ball_handler_out                    0.0087 [INJURY]
+  games_with_this_config              0.0071 [INJURY]
+  starter_1_out                       0.0034 [INJURY]
+  n_starters_out                      0.0029 [INJURY]

@@ -33,7 +33,7 @@ from backend.scripts.utils import (
 )
 
 # --- Configuration ---
-SEASONS = ["2022-23", "2023-24", "2024-25"]
+SEASONS = ["2022-23", "2023-24", "2024-25", "2025-26"]
 SEASON_TYPE = "Regular Season"
 
 CHECKPOINT_FILE = str(CHECKPOINT_DIR / "collect_stats_checkpoint.json")

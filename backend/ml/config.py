@@ -21,7 +21,7 @@ ML_DIR = PROJECT_ROOT / "backend" / "ml"
 # Train/Test Split
 # ──────────────────────────────────────────────
 
-SPLIT_DATE = "2024-10-01"
+SPLIT_DATE = "2025-10-01"
 
 # ──────────────────────────────────────────────
 # Minimum games for role qualification (matches process_data.py)

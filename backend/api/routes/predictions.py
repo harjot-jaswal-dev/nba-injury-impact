@@ -119,9 +119,11 @@ def get_game_predictions(game_id: int, db=Depends(get_db)):
         return GamePredictionsResponse(**cached)
 
     # Cache miss — compute live
-    key_players = data_store.get_key_players_for_game(game_id)
-    home_team = key_players.get("home_team", "")
-    away_team = key_players.get("away_team", "")
+    home_team = game_info["home_team"]
+    away_team = game_info["away_team"]
+    key_players = data_store.get_key_players_for_game(
+        game_id, home_team=home_team, away_team=away_team,
+    )
     home_preds = []
     away_preds = []
 

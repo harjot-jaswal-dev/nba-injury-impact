@@ -1,47 +1,47 @@
 {
   "chosen_approach": "B",
-  "median_ripple_sensitivity": 0.25802631758392147,
+  "median_ripple_sensitivity": 0.1874621227087383,
   "threshold": 0.3,
   "per_stat_sensitivity": {
     "pts": {
-      "mean_ripple": 1.8390165031384602,
-      "max_ripple": 11.044866399510626,
-      "pct_above_1": 66.40310195392686
+      "mean_ripple": 1.5024977626757106,
+      "max_ripple": 9.409192863460582,
+      "pct_above_1": 58.650371944739646
     },
     "ast": {
-      "mean_ripple": 0.40118265680331183,
-      "max_ripple": 3.0762844768073734,
-      "pct_above_1": 8.560784611875617
+      "mean_ripple": 0.30691970543389546,
+      "max_ripple": 3.8763426477701284,
+      "pct_above_1": 4.420828905419767
     },
     "reb": {
-      "mean_ripple": 0.7299446787468602,
-      "max_ripple": 4.647963805452271,
-      "pct_above_1": 22.702045160799816
+      "mean_ripple": 0.5509056173151821,
+      "max_ripple": 4.472651186203784,
+      "pct_above_1": 12.380446333687567
     },
     "stl": {
-      "mean_ripple": 0.11486997836453111,
-      "max_ripple": 0.914408537859457,
+      "mean_ripple": 0.06800453998358111,
+      "max_ripple": 0.6637848716817982,
       "pct_above_1": 0.0
     },
     "blk": {
-      "mean_ripple": 0.08349677509493007,
-      "max_ripple": 1.4720921001593577,
-      "pct_above_1": 0.08363111077320763
+      "mean_ripple": 0.0656086633146601,
+      "max_ripple": 0.9726357828671122,
+      "pct_above_1": 0.0
     },
     "fg_pct": {
-      "mean_ripple": 0.011786828922440951,
-      "max_ripple": 0.22227817338651246,
+      "mean_ripple": 0.007676346753249726,
+      "max_ripple": 0.18731481130076433,
       "pct_above_1": 0.0
     },
     "ft_pct": {
-      "mean_ripple": 0.06417117876012633,
-      "max_ripple": 0.47740014004188497,
+      "mean_ripple": 0.04152816350466048,
+      "max_ripple": 0.3620868820856544,
       "pct_above_1": 0.0
     },
     "minutes": {
-      "mean_ripple": 4.5588180007344095,
-      "max_ripple": 31.94140449610463,
-      "pct_above_1": 96.5026990040295
+      "mean_ripple": 3.6016038215946273,
+      "max_ripple": 20.956829420656405,
+      "pct_above_1": 94.14452709883103
     }
   }
 }
