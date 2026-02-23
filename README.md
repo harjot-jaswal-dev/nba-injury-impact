@@ -13,7 +13,11 @@
 
 **[Live Demo](https://nba-injury-impact.vercel.app)** · **[API Docs](https://web-production-04edf.up.railway.app/docs)**
 
-[Screenshot placeholders - will be added]
+![Injury Simulator — Ripple effect visualization showing how Dončić and LeBron's absences redistribute points across LAL teammates](docs/screenshots/simulator.png)
+
+![Dashboard — Upcoming games list with baseline player predictions for a selected matchup](docs/screenshots/dashboard.png)
+
+![AI Chat — Claude-powered analysis of Stephen Curry's injury impact on the Warriors](docs/screenshots/chat.png)
 
 ---
 
