@@ -23,13 +23,16 @@ class Settings:
     # Session signing
     SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-secret-change-in-production")
 
+    # Backend URL — used to build OAuth redirect URI
+    BACKEND_URL: str = os.getenv("BACKEND_URL", "http://localhost:8000")
+
     # Google OAuth
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
     GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET", "")
-    GOOGLE_REDIRECT_URI: str = os.getenv(
-        "GOOGLE_REDIRECT_URI",
-        "http://localhost:8000/api/auth/google/callback",
-    )
+
+    @property
+    def GOOGLE_REDIRECT_URI(self) -> str:
+        return f"{self.BACKEND_URL.rstrip('/')}/api/auth/google/callback"
 
     # Frontend URL — used for CORS origin and OAuth redirect destination
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
