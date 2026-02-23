@@ -88,7 +88,11 @@ class DataStore:
         """
         # Try schedule.csv first
         if self._schedule_df is not None and not self._schedule_df.empty:
-            scheduled = self._schedule_df[self._schedule_df["status"] == "scheduled"]
+            today = pd.Timestamp.now().normalize()
+            scheduled = self._schedule_df[
+                (self._schedule_df["status"] == "scheduled")
+                & (self._schedule_df["game_date"] >= today)
+            ]
             # Filter out placeholder games (play-in/finals) with no teams assigned
             scheduled = scheduled.dropna(subset=["home_team", "away_team"])
             if not scheduled.empty:
@@ -231,9 +235,9 @@ class DataStore:
                 key = "home" if side == "HOME" else "away"
                 result[f"{key}_team"] = team_abbr
 
-                # Find all players on this team up to the game date
+                # Find all players currently on this team up to the game date
                 team_all = df[
-                    (df["team_abbr"] == team_abbr)
+                    (df["current_team"] == team_abbr)
                     & (df["game_date"] <= game_date)
                 ]
                 # Get the latest row per player to check season_avg_minutes
@@ -256,7 +260,7 @@ class DataStore:
         elif home_team and away_team:
             # Future game — use team hints to find latest key players
             for key, team_abbr in [("home", home_team), ("away", away_team)]:
-                team_all = df[df["team_abbr"] == team_abbr]
+                team_all = df[df["current_team"] == team_abbr]
                 if team_all.empty:
                     continue
                 latest_per_player = (
@@ -332,7 +336,8 @@ class DataStore:
         latest = df.sort_values("game_date").groupby("player_id").last().reset_index()
 
         if team:
-            latest = latest[latest["team_abbr"] == team.upper()]
+            team_col = "current_team" if "current_team" in latest.columns else "team_abbr"
+            latest = latest[latest[team_col] == team.upper()]
         if search:
             mask = latest["player_name"].str.contains(search, case=False, na=False)
             latest = latest[mask]
@@ -343,7 +348,7 @@ class DataStore:
                 {
                     "player_id": int(row["player_id"]),
                     "player_name": row["player_name"],
-                    "team_abbr": row["team_abbr"],
+                    "team_abbr": row.get("current_team", row["team_abbr"]),
                     "position": _safe_val(row.get("position")),
                     "season_avg_pts": _safe_float(row.get("season_avg_pts")),
                     "season_avg_ast": _safe_float(row.get("season_avg_ast")),
@@ -399,7 +404,7 @@ class DataStore:
         result = {
             "player_id": int(player_id),
             "player_name": latest["player_name"],
-            "team_abbr": latest["team_abbr"],
+            "team_abbr": latest.get("current_team", latest["team_abbr"]),
             "position": _safe_val(latest.get("position")),
             "age": _safe_float(latest.get("age")),
             "experience": _safe_val(latest.get("experience")),

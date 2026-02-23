@@ -13,6 +13,7 @@ venv/
 
 # Data files (large CSVs)
 backend/data/raw/*.csv
+!backend/data/raw/schedule.csv
 backend/data/checkpoints/
 
 # Node
