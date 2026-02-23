@@ -286,8 +286,19 @@ def _compute_injury_context(team_abbr: str, absent_player_ids: list,
         # No absences — all zeros
         return {feat: 0 for feat in INJURY_FEATURES}
 
-    # Get team players — use most recent season's data
-    team_df = df[df["team_abbr"] == team_abbr].copy()
+    # Get players currently on this team, using current_team column
+    # (handles traded players — only includes players whose most recent
+    # game was for this team, not players who left mid-season)
+    if "current_team" in df.columns:
+        current_player_ids = df.loc[
+            df["current_team"] == team_abbr, "player_id"
+        ].unique()
+        team_df = df[
+            (df["player_id"].isin(current_player_ids))
+            & (df["team_abbr"] == team_abbr)
+        ].copy()
+    else:
+        team_df = df[df["team_abbr"] == team_abbr].copy()
     if date:
         team_df = team_df[team_df["game_date"] < pd.to_datetime(date)]
 
@@ -560,9 +571,20 @@ def get_ripple_effect(team: str, absent_player_ids: list,
     # Compute injury context once for the team
     injury_context = _compute_injury_context(team, absent_player_ids, date)
 
-    # Get all active players on the team
+    # Get all active players currently on the team
     df = store.get_player_data()
-    team_df = df[df["team_abbr"] == team]
+
+    # Use current_team to find players whose most recent game was for this team
+    if "current_team" in df.columns:
+        current_player_ids = df.loc[
+            df["current_team"] == team, "player_id"
+        ].unique()
+        team_df = df[
+            (df["player_id"].isin(current_player_ids))
+            & (df["team_abbr"] == team)
+        ]
+    else:
+        team_df = df[df["team_abbr"] == team]
 
     if date:
         team_df = team_df[team_df["game_date"] < pd.to_datetime(date)]
@@ -648,9 +670,9 @@ def simulate_injury(player_id_to_injure: int,
             f"Player {player_id_to_injure} not found in processed data"
         )
 
-    # Use most recent team
+    # Use most recent team (prefer current_team if available)
     latest = player_df.sort_values("game_date").iloc[-1]
-    team = latest["team_abbr"]
+    team = latest.get("current_team", latest["team_abbr"])
 
     opponent = game_context.get("opponent", "")
     home_or_away = game_context.get("home_or_away", "HOME")

@@ -834,6 +834,24 @@ def main():
     # Phase 5: Build target variables
     df = build_target_variables(df)
 
+    # Phase 6: Assign current_team from each player's most recent game
+    # team_abbr = the team for THAT specific game (historical, per-row)
+    # current_team = the team from the player's MOST RECENT game (same for all rows)
+    logger.info("Assigning current team from most recent game log...")
+    latest_team = (
+        df.sort_values("game_date")
+        .groupby("player_id")["team_abbr"]
+        .last()
+        .rename("current_team")
+    )
+    df = df.merge(latest_team, on="player_id", how="left")
+    df["current_team"] = df["current_team"].fillna(df["team_abbr"])
+
+    n_traded = (
+        df.groupby("player_id")["team_abbr"].nunique() > 1
+    ).sum()
+    logger.info(f"  Players with multiple teams in dataset: {n_traded}")
+
     # Drop rows where ALL season average features are NaN
     # (first game of the season — no prior data)
     season_avg_cols = [c for c in df.columns if c.startswith("season_avg_")]
