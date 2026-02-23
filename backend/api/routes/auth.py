@@ -131,18 +131,17 @@ def google_callback(code: str, db=Depends(get_db)):
     db.add(session)
     db.commit()
 
-    # Redirect to frontend with session cookie
-    # SameSite=Lax with Secure=False works for localhost cross-port dev
-    # (frontend on :3000, API on :8000). In production, set Secure=True
-    # when serving over HTTPS.
-    is_secure = settings.FRONTEND_URL.startswith("https")
+    # Redirect to frontend with session cookie.
+    # Cross-origin (Vercel→Railway) requires SameSite=None + Secure=True.
+    # Local dev over HTTP can't use SameSite=None, so fall back to Lax.
+    is_https = settings.BACKEND_URL.startswith("https")
     redirect = RedirectResponse(url=settings.FRONTEND_URL, status_code=302)
     redirect.set_cookie(
         key="session_token",
         value=token,
         httponly=True,
-        samesite="lax",
-        secure=is_secure,
+        samesite="none" if is_https else "lax",
+        secure=is_https,
         max_age=30 * 24 * 3600,  # 30 days
         path="/",
     )
@@ -168,5 +167,12 @@ def logout(request: Request, response: Response, db=Depends(get_db)):
     if token:
         db.query(Session).filter(Session.session_token == token).delete()
         db.commit()
-    response.delete_cookie("session_token", path="/")
+    is_https = settings.BACKEND_URL.startswith("https")
+    response.delete_cookie(
+        "session_token",
+        path="/",
+        samesite="none" if is_https else "lax",
+        secure=is_https,
+        httponly=True,
+    )
     return {"detail": "Logged out"}
